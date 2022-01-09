@@ -1,3 +1,4 @@
+from django.http.request import HttpRequest
 from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -8,7 +9,7 @@ def index(request):
 def samuel(request):
     return HttpResponse('Hello, Samuel!')
 
-def greet(request, name):
+def greet(request, name: str):
     return render(request, 'hello/greet.html', {
         'name': name.capitalize()
     })
