@@ -6,6 +6,11 @@
 
 {% block body %}
     <h1>Error</h1>
-    <p>Could not find page {{ page }}.</p>
-
+    {% if page %}
+        <p>Could not find page {{ page }}.</p>
+    {% elif message %}
+        <p>{{ message }}</p>
+    {% else %}
+        <p>An unexpected error occurred. Please try again.</p>
+    {% endif %}
 {% endblock %}
