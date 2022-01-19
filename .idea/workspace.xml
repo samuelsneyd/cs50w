@@ -3,14 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4ed54143-c144-4ea3-8f93-5a297fe15a60" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/static/encyclopedia/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/static/encyclopedia/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/error.html" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/error.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/layout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/wiki_page.html" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/wiki_page.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wiki/entries/CSS.md" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/entries/CSS.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/wiki/entries/Python.md" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/entries/Python.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/new.html" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/templates/encyclopedia/new.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +21,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="ProjectId" id="23SAoY0lsse2VeImRKiogfyT21a" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
