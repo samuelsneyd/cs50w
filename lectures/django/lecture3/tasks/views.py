@@ -18,7 +18,7 @@ class NewTaskForm(forms.Form):
 def index(request: HttpRequest) -> HttpResponse:
     if 'tasks' not in request.session:
         request.session['tasks'] = []
-    return render(request, 'tasks/index.html', {
+    return render(request, 'tasks/user.html', {
         'tasks': request.session['tasks']
     })
 

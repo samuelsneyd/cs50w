@@ -10,7 +10,7 @@ def index(request: HttpRequest):
     """
     Renders the home page.
     """
-    return render(request, "encyclopedia/index.html", {
+    return render(request, "encyclopedia/user.html", {
         "entries": util.list_entries()
     })
 
