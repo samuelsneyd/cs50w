@@ -14,6 +14,9 @@ class Category(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name_plural = 'categories'
+
     def __str__(self):
         return f'{self.name}'
 
@@ -22,17 +25,18 @@ class Listing(models.Model):
     """Listings for sale or for auction."""
     title = models.CharField(max_length=64)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='listings')
-    price = models.FloatField()
+    starting_bid = models.FloatField()
+    current_bid = models.FloatField()
     description = models.CharField(max_length=1024)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='categories')
     is_active = models.BooleanField(default=True)
-    starting_bid = models.FloatField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    image = models.URLField(max_length=256, null=True)
+    image = models.URLField(max_length=256, blank=True)
+    watchers = models.ManyToManyField(User, on_delete=models.CASCADE, related_name='watching')
 
     def __str__(self):
-        return f'{self.id}: {self.title}'
+        return f'{self.pk}: {self.title}'
 
 
 class Bid(models.Model):

@@ -1,5 +1,9 @@
-from django import forms
+from django.forms import ModelForm
+from .models import Listing
 
 
-class NameForm(forms.Form):
-    your_name = forms.CharField(label='Your name', max_length=64)
+class ListingForm(ModelForm):
+    """Listings for sale or for auction."""
+    class Meta:
+        model = Listing
+        fields = ['title', 'starting_bid', 'description', 'category', 'image']

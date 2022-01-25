@@ -2,12 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ed54143-c144-4ea3-8f93-5a297fe15a60" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/commerce/auctions/templates/auctions/create.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commerce/auctions/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/auctions/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/auctions/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/auctions/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/migrations/0001_initial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commerce/auctions/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commerce/auctions/templates/auctions/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/templates/auctions/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/auctions/templates/auctions/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/templates/auctions/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/auctions/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commerce/auctions/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commerce/db.sqlite3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -1,10 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User, Listing
+from .forms import ListingForm
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -17,6 +19,7 @@ def index(request: HttpRequest) -> HttpResponse:
 
 
 def login_view(request: HttpRequest) -> HttpResponse:
+    """Logs the user in."""
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -37,11 +40,13 @@ def login_view(request: HttpRequest) -> HttpResponse:
 
 
 def logout_view(request: HttpRequest) -> HttpResponse:
+    """Logs the user out."""
     logout(request)
     return HttpResponseRedirect(reverse("index"))
 
 
 def register(request: HttpRequest) -> HttpResponse:
+    """Registers a new user."""
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
@@ -63,10 +68,30 @@ def register(request: HttpRequest) -> HttpResponse:
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("index"))(reverse("index"))
     else:
         return render(request, "auctions/register.html")
 
 
+@login_required(login_url='login')
 def create(request: HttpRequest) -> HttpResponse:
-    """Allows users to create a new listitng."""
+    """Allows users to create a new listing."""
+
+    if request.method == 'POST':
+        user = User.objects.get(pk=request.user.id)
+        form = ListingForm(request.POST)
+
+        if form.is_valid():
+            listing = form.save(commit=False)
+            listing.user = user
+            listing.current_bid = listing.starting_bid
+            listing.save()
+
+            return HttpResponseRedirect(reverse('index'))
+
+    else:
+        form = ListingForm()
+
+    return render(request, 'auctions/create.html', {
+        'form': form
+    })
