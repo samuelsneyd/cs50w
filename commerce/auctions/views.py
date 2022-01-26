@@ -95,3 +95,17 @@ def create(request: HttpRequest) -> HttpResponse:
     return render(request, 'auctions/create.html', {
         'form': form
     })
+
+
+def listing_page(request: HttpRequest, listing_id: int) -> HttpResponse:
+    """Page for individual listings."""
+    try:
+        listing = Listing.objects.get(pk=listing_id)
+    except Listing.DoesNotExist:
+        return HttpResponseRedirect(reverse('index'))
+
+    if listing is not None:
+        return render(request, 'auctions/listing.html', {
+            'listing': listing
+        })
+

@@ -33,7 +33,7 @@ class Listing(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.URLField(max_length=256, blank=True)
-    watchers = models.ManyToManyField(User, on_delete=models.CASCADE, related_name='watching')
+    watchers = models.ManyToManyField(User, related_name='watching')
 
     def __str__(self):
         return f'{self.pk}: {self.title}'
