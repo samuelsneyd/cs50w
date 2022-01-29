@@ -1,12 +1,13 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User, Listing
-from .forms import ListingForm
+from .forms import ListingForm, WatchForm
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -19,7 +20,7 @@ def index(request: HttpRequest) -> HttpResponse:
 
 
 def login_view(request: HttpRequest) -> HttpResponse:
-    """Logs the user in."""
+    """Logs the user in and redirects to index."""
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -68,7 +69,7 @@ def register(request: HttpRequest) -> HttpResponse:
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))(reverse("index"))
+        return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
 
@@ -78,7 +79,7 @@ def create(request: HttpRequest) -> HttpResponse:
     """Allows users to create a new listing."""
 
     if request.method == 'POST':
-        user = User.objects.get(pk=request.user.id)
+        user = User.objects.get(pk=request.user.pk)
         form = ListingForm(request.POST)
 
         if form.is_valid():
@@ -101,7 +102,7 @@ def listing_page(request: HttpRequest, listing_id: int) -> HttpResponse:
     """Page for individual listings."""
     try:
         listing = Listing.objects.get(pk=listing_id)
-    except Listing.DoesNotExist:
+    except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse('index'))
 
     if listing is not None:
@@ -109,3 +110,29 @@ def listing_page(request: HttpRequest, listing_id: int) -> HttpResponse:
             'listing': listing
         })
 
+
+@login_required(login_url='login')
+def watch(request: HttpRequest) -> HttpResponse:
+    """Add or remove listings from watchlist"""
+    if request.method == 'POST':
+        form = WatchForm(request.POST)
+        print(request.user)
+        # user = User.objects.get(pk=request.user)
+        user = request.user
+        listing = Listing.objects.get(pk=request.POST['pk'])
+        if user not in listing.watchers.all():
+            listing.watchers.add(user)
+        else:
+            listing.watchers.remove(user)
+
+        return HttpResponseRedirect(reverse('listing', args=[listing.pk]))
+
+
+@login_required(login_url='login')
+def watchlist(request: HttpRequest) -> HttpResponse:
+    """Displays the users watched listings."""
+    listings = request.user.watching.all()
+
+    return render(request, 'auctions/watchlist.html', {
+        'listings': listings
+    })

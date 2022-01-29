@@ -9,5 +9,5 @@ urlpatterns = [
     path('search', views.search_page, name='search'),
     path('new', views.new_page, name='new'),
     path('random', views.random_page, name='random'),
-    path('error', views.error, name='error')
+    path('error', views.error, name='error'),
 ]

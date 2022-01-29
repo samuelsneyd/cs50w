@@ -7,3 +7,10 @@ class ListingForm(ModelForm):
     class Meta:
         model = Listing
         fields = ['title', 'starting_bid', 'description', 'category', 'image']
+
+
+class WatchForm(ModelForm):
+    """Add or remove a listing from watchlist."""
+    class Meta:
+        model = Listing
+        fields = ['watchers']

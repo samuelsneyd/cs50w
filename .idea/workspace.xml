@@ -3,12 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="4ed54143-c144-4ea3-8f93-5a297fe15a60" name="Changes" comment="Add create listings functionality.&#10;&#10;Display listings on homepage as cards.&#10;&#10;Register models with Django admin app.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commerce/auctions/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/commerce/auctions/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commerce/auctions/templates/auctions/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/templates/auctions/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/auctions/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/auctions/templates/auctions/listing.html" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/templates/auctions/listing.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commerce/auctions/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commerce/auctions/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commerce/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/wiki/encyclopedia/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/wiki/encyclopedia/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

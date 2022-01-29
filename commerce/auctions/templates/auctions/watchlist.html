@@ -1,8 +1,9 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-  <h2>{{ listing.title }}</h2>
+  <h2>Watching</h2>
 
+  {% for listing in listings %}
     <div class="card mb-3" style="max-width: 540px;">
       <div class="row g-0">
         <div class="col-md-4">
@@ -14,15 +15,12 @@
             <p class="card-text">Price: ${{ listing.current_bid }}</p>
             <p class="card-text">{{ listing.description }}.</p>
             <p class="card-text"><small class="text-muted">Created {{ listing.created_at|date:"M d, Y" }}</small></p>
+            <a href="{% url 'listing' listing.pk %}" class="card-link">View</a>
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <form method="post" action="{% url 'watch' %}">
-        {% csrf_token %}
-        <input type="text" name="pk" value="{{ listing.pk }}" hidden>
-        <input type="submit" value="Watch">
-      </form>
-    </div>
+  {% empty %}
+    <div>No listings in watchlist.</div>
+  {% endfor %}
 {% endblock %}
