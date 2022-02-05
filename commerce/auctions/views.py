@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Listing
+from .models import User, Listing, Category
 from .forms import ListingForm, CommentForm
 
 
@@ -14,7 +14,11 @@ def index(request: HttpRequest) -> HttpResponse:
     """Renders the index view with all active listings."""
     listings = Listing.objects.all()
 
-    return render(request, "auctions/index.html", {"listings": listings})
+    return render(
+        request,
+        "auctions/index.html",
+        {"listings": listings},
+    )
 
 
 def login_view(request: HttpRequest) -> HttpResponse:
@@ -36,8 +40,8 @@ def login_view(request: HttpRequest) -> HttpResponse:
                 "auctions/login.html",
                 {"message": "Invalid username and/or password."},
             )
-    else:
-        return render(request, "auctions/login.html")
+
+    return render(request, "auctions/login.html")
 
 
 def logout_view(request: HttpRequest) -> HttpResponse:
@@ -57,7 +61,9 @@ def register(request: HttpRequest) -> HttpResponse:
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(
-                request, "auctions/register.html", {"message": "Passwords must match."}
+                request,
+                "auctions/register.html",
+                {"message": "Passwords must match."},
             )
 
         # Attempt to create new user
@@ -72,8 +78,8 @@ def register(request: HttpRequest) -> HttpResponse:
             )
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
-    else:
-        return render(request, "auctions/register.html")
+
+    return render(request, "auctions/register.html")
 
 
 @login_required(login_url="login")
@@ -112,6 +118,7 @@ def listing_page(request: HttpRequest, listing_id: int) -> HttpResponse:
     comment_form = CommentForm()
     comments = listing.comments.all()
     is_watching = False
+    user = None
 
     if request.user:
         user = User.objects.get(pk=request.user.pk)
@@ -153,7 +160,11 @@ def watchlist(request: HttpRequest) -> HttpResponse:
     """Displays the users watched listings."""
     listings = request.user.watching.all()
 
-    return render(request, "auctions/watchlist.html", {"listings": listings})
+    return render(
+        request,
+        "auctions/watchlist.html",
+        {"listings": listings},
+    )
 
 
 def comment(request: HttpRequest, listing_id: int) -> HttpResponse:
@@ -175,5 +186,34 @@ def comment(request: HttpRequest, listing_id: int) -> HttpResponse:
     return HttpResponseRedirect(reverse("listing", args=[listing.pk]))
 
 
-def bid(request: HttpRequest) -> HttpResponse:
+def bid(request: HttpRequest, listing_id) -> HttpResponse:
+    """Handles users bidding on a listing."""
     return HttpResponse("TODO")
+
+
+def categories(request: HttpRequest) -> HttpResponse:
+    """Renders a page with links to all listing categories."""
+    category_list = Category.objects.all()
+    return render(
+        request,
+        "auctions/categories.html",
+        {"categories": category_list},
+    )
+
+
+def category(request: HttpRequest, category_name: str) -> HttpResponse:
+    """Renders a page with all listings of a particular category."""
+    try:
+        current_category = Category.objects.get(name=category_name)
+    except ObjectDoesNotExist:
+        return HttpResponseRedirect(reverse("categories"))
+    listings = Listing.objects.filter(category=current_category)
+
+    return render(
+        request,
+        "auctions/category.html",
+        {
+            "category": current_category,
+            "listings": listings,
+        },
+    )
