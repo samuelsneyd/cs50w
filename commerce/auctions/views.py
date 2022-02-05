@@ -5,7 +5,6 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
-
 from .models import User, Listing, Category
 from .forms import ListingForm, CommentForm
 
@@ -14,11 +13,7 @@ def index(request: HttpRequest) -> HttpResponse:
     """Renders the index view with all active listings."""
     listings = Listing.objects.all()
 
-    return render(
-        request,
-        "auctions/index.html",
-        {"listings": listings},
-    )
+    return render(request, "auctions/index.html", {"listings": listings})
 
 
 def login_view(request: HttpRequest) -> HttpResponse:
@@ -61,9 +56,7 @@ def register(request: HttpRequest) -> HttpResponse:
         confirmation = request.POST["confirmation"]
         if password != confirmation:
             return render(
-                request,
-                "auctions/register.html",
-                {"message": "Passwords must match."},
+                request, "auctions/register.html", {"message": "Passwords must match."}
             )
 
         # Attempt to create new user
@@ -102,9 +95,7 @@ def create(request: HttpRequest) -> HttpResponse:
         create_listing_form = ListingForm()
 
     return render(
-        request,
-        "auctions/create.html",
-        {"create_listing_form": create_listing_form},
+        request, "auctions/create.html", {"create_listing_form": create_listing_form}
     )
 
 
@@ -160,11 +151,7 @@ def watchlist(request: HttpRequest) -> HttpResponse:
     """Displays the users watched listings."""
     listings = request.user.watching.all()
 
-    return render(
-        request,
-        "auctions/watchlist.html",
-        {"listings": listings},
-    )
+    return render(request, "auctions/watchlist.html", {"listings": listings})
 
 
 def comment(request: HttpRequest, listing_id: int) -> HttpResponse:
@@ -201,11 +188,7 @@ def bid(request: HttpRequest, listing_id) -> HttpResponse:
 def categories(request: HttpRequest) -> HttpResponse:
     """Renders a page with links to all listing categories."""
     category_list = Category.objects.all()
-    return render(
-        request,
-        "auctions/categories.html",
-        {"categories": category_list},
-    )
+    return render(request, "auctions/categories.html", {"categories": category_list})
 
 
 def category(request: HttpRequest, category_name: str) -> HttpResponse:
@@ -220,8 +203,5 @@ def category(request: HttpRequest, category_name: str) -> HttpResponse:
     return render(
         request,
         "auctions/category.html",
-        {
-            "category": current_category,
-            "listings": listings,
-        },
+        {"category": current_category, "listings": listings},
     )
