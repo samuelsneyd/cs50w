@@ -7,16 +7,14 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User, Listing
-from .forms import ListingForm, WatchForm
+from .forms import ListingForm, CommentForm
 
 
 def index(request: HttpRequest) -> HttpResponse:
     """Renders the index view with all active listings."""
     listings = Listing.objects.all()
 
-    return render(request, "auctions/index.html", {
-        'listings': listings
-    })
+    return render(request, "auctions/index.html", {"listings": listings})
 
 
 def login_view(request: HttpRequest) -> HttpResponse:
@@ -33,9 +31,11 @@ def login_view(request: HttpRequest) -> HttpResponse:
             login(request, user)
             return HttpResponseRedirect(reverse("index"))
         else:
-            return render(request, "auctions/login.html", {
-                "message": "Invalid username and/or password."
-            })
+            return render(
+                request,
+                "auctions/login.html",
+                {"message": "Invalid username and/or password."},
+            )
     else:
         return render(request, "auctions/login.html")
 
@@ -56,46 +56,50 @@ def register(request: HttpRequest) -> HttpResponse:
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return render(request, "auctions/register.html", {
-                "message": "Passwords must match."
-            })
+            return render(
+                request, "auctions/register.html", {"message": "Passwords must match."}
+            )
 
         # Attempt to create new user
         try:
             user = User.objects.create_user(username, email, password)
             user.save()
         except IntegrityError:
-            return render(request, "auctions/register.html", {
-                "message": "Username already taken."
-            })
+            return render(
+                request,
+                "auctions/register.html",
+                {"message": "Username already taken."},
+            )
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def create(request: HttpRequest) -> HttpResponse:
     """Allows users to create a new listing."""
 
-    if request.method == 'POST':
+    if request.method == "POST":
         user = User.objects.get(pk=request.user.pk)
-        form = ListingForm(request.POST)
+        create_listing_form = ListingForm(request.POST)
 
-        if form.is_valid():
-            listing = form.save(commit=False)
+        if create_listing_form.is_valid():
+            listing = create_listing_form.save(commit=False)
             listing.user = user
             listing.current_bid = listing.starting_bid
             listing.save()
 
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(reverse("index"))
 
     else:
-        form = ListingForm()
+        create_listing_form = ListingForm()
 
-    return render(request, 'auctions/create.html', {
-        'form': form
-    })
+    return render(
+        request,
+        "auctions/create.html",
+        {"create_listing_form": create_listing_form},
+    )
 
 
 def listing_page(request: HttpRequest, listing_id: int) -> HttpResponse:
@@ -103,36 +107,73 @@ def listing_page(request: HttpRequest, listing_id: int) -> HttpResponse:
     try:
         listing = Listing.objects.get(pk=listing_id)
     except ObjectDoesNotExist:
-        return HttpResponseRedirect(reverse('index'))
+        return HttpResponseRedirect(reverse("index"))
 
-    if listing is not None:
-        return render(request, 'auctions/listing.html', {
-            'listing': listing
-        })
+    comment_form = CommentForm()
+    comments = listing.comments.all()
+    is_watching = False
+
+    if request.user:
+        user = User.objects.get(pk=request.user.pk)
+        if len(user.watching.filter(pk=listing_id)) > 0:
+            is_watching = True
+
+    return render(
+        request,
+        "auctions/listing.html",
+        {
+            "user": user,
+            "listing": listing,
+            "comments": comments,
+            "comment_form": comment_form,
+            "is_watching": is_watching,
+        },
+    )
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def watch(request: HttpRequest) -> HttpResponse:
     """Add or remove listings from watchlist"""
-    if request.method == 'POST':
-        form = WatchForm(request.POST)
-        print(request.user)
-        # user = User.objects.get(pk=request.user)
+    if request.method == "POST":
         user = request.user
-        listing = Listing.objects.get(pk=request.POST['pk'])
+        listing = Listing.objects.get(pk=request.POST.get("pk"))
+
         if user not in listing.watchers.all():
             listing.watchers.add(user)
         else:
             listing.watchers.remove(user)
 
-        return HttpResponseRedirect(reverse('listing', args=[listing.pk]))
+        return HttpResponseRedirect(reverse("listing", args=[listing.pk]))
+
+    return HttpResponseRedirect(reverse("index"))
 
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def watchlist(request: HttpRequest) -> HttpResponse:
     """Displays the users watched listings."""
     listings = request.user.watching.all()
 
-    return render(request, 'auctions/watchlist.html', {
-        'listings': listings
-    })
+    return render(request, "auctions/watchlist.html", {"listings": listings})
+
+
+def comment(request: HttpRequest, listing_id: int) -> HttpResponse:
+    """Handles adding a comment to a listing."""
+    try:
+        listing = Listing.objects.get(pk=listing_id)
+        user = User.objects.get(pk=request.user.pk)
+    except ObjectDoesNotExist:
+        return HttpResponseRedirect(reverse("index"))
+
+    comment_form = CommentForm(request.POST)
+
+    if listing is not None and comment_form.is_valid():
+        new_comment = comment_form.save(commit=False)
+        new_comment.user = user
+        new_comment.listing = listing
+        new_comment.save()
+
+    return HttpResponseRedirect(reverse("listing", args=[listing.pk]))
+
+
+def bid(request: HttpRequest) -> HttpResponse:
+    return HttpResponse("TODO")

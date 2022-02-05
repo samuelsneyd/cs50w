@@ -1,16 +1,18 @@
-from django.forms import ModelForm
-from .models import Listing
+import django.forms as forms
+from .models import Listing, Comment
 
 
-class ListingForm(ModelForm):
+class ListingForm(forms.ModelForm):
     """Listings for sale or for auction."""
+
     class Meta:
         model = Listing
-        fields = ['title', 'starting_bid', 'description', 'category', 'image']
+        fields = ["title", "starting_bid", "description", "category", "image"]
 
 
-class WatchForm(ModelForm):
-    """Add or remove a listing from watchlist."""
+class CommentForm(forms.ModelForm):
+    """Comment on a listing as a user."""
+
     class Meta:
-        model = Listing
-        fields = ['watchers']
+        model = Comment
+        fields = ["comment"]

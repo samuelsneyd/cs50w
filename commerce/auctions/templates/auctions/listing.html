@@ -3,26 +3,72 @@
 {% block body %}
   <h2>{{ listing.title }}</h2>
 
-    <div class="card mb-3" style="max-width: 540px;">
-      <div class="row g-0">
-        <div class="col-md-4">
-          <img src="{{ listing.image }}" class="img-fluid rounded-start" alt="{{ listing.title }}">
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <h5 class="card-title">{{ listing.title }}</h5>
-            <p class="card-text">Price: ${{ listing.current_bid }}</p>
-            <p class="card-text">{{ listing.description }}.</p>
-            <p class="card-text"><small class="text-muted">Created {{ listing.created_at|date:"M d, Y" }}</small></p>
-          </div>
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img src="{{ listing.image }}" class="img-fluid rounded-start" alt="{{ listing.title }}">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">{{ listing.title }}</h5>
+          <p class="card-text">Price: ${{ listing.current_bid }}</p>
+          <p class="card-text">{{ listing.description }}.</p>
+          <p class="card-text"><small class="text-muted">Submitted by: {{ listing.user }}</small></p>
+          <p class="card-text"><small class="text-muted">Created {{ listing.created_at|date:"M d, Y" }}</small></p>
         </div>
       </div>
     </div>
-    <div>
-      <form method="post" action="{% url 'watch' %}">
+  </div>
+  {% if user %}
+    <div id="bid-div">
+      <form method="post" action="{% url 'bid' listing.pk %}">
         {% csrf_token %}
-        <input type="text" name="pk" value="{{ listing.pk }}" hidden>
-        <input type="submit" value="Watch">
+        <label>
+          <input type="text" name="pk" value="{{ listing.pk }}" hidden>
+        </label>
+        <input type="submit" value="Bid">
       </form>
     </div>
+  {% endif %}
+  <div id="watch-div">
+    <form method="post" action="{% url 'watch' %}">
+      {% csrf_token %}
+      <label>
+        <input type="text" name="pk" value="{{ listing.pk }}" hidden>
+      </label>
+      {% if not is_watching %}
+        <input type="submit" value="Watch">
+      {% else %}
+        <input type="submit" value="Stop watching">
+      {% endif %}
+    </form>
+  </div>
+  <div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">Comments</h5>
+          <form method="post" action="{% url 'comment' listing.pk %}">
+            {% csrf_token %}
+            <div>
+              {{ comment_form }}
+            </div>
+            <label>
+              <input type="text" name="pk" value="{{ listing.pk }}" hidden>
+            </label>
+            <input type="submit" value="Comment">
+          </form>
+          {% for comment in comments %}
+            <p class="card-text">
+              {{ comment.comment }}<br>
+              <small class="text-muted">{{ comment.user }}</small><br>
+              <small class="text-muted">{{ comment.created_at|date:"M d, Y g:i a e" }}</small>
+            </p>
+          {% empty %}
+            <p class="card-text">No comments.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
