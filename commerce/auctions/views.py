@@ -22,7 +22,7 @@ def index(request: HttpRequest) -> HttpResponse:
 
 
 def login_view(request: HttpRequest) -> HttpResponse:
-    """Logs the user in and redirects to index."""
+    """Logs the user in and redirects to index on login."""
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -96,7 +96,7 @@ def create(request: HttpRequest) -> HttpResponse:
             listing.current_bid = listing.starting_bid
             listing.save()
 
-            return HttpResponseRedirect(reverse("index"))
+            return HttpResponseRedirect(reverse("listing", args=[listing.pk]))
 
     else:
         create_listing_form = ListingForm()
@@ -207,6 +207,7 @@ def category(request: HttpRequest, category_name: str) -> HttpResponse:
         current_category = Category.objects.get(name=category_name)
     except ObjectDoesNotExist:
         return HttpResponseRedirect(reverse("categories"))
+
     listings = Listing.objects.filter(category=current_category)
 
     return render(
