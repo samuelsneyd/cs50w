@@ -3,9 +3,18 @@
   <component name="ChangeListManager">
     <list default="true" id="4ed54143-c144-4ea3-8f93-5a297fe15a60" name="Changes" comment="Add create listings functionality.&#10;&#10;Display listings on homepage as cards.&#10;&#10;Register models with Django admin app.">
       <change beforePath="$PROJECT_DIR$/.idea/cs50w.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cs50w.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/auctions/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/migrations/0001_initial.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/commerce/auctions/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/auctions/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/commerce/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/commerce/commerce/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/commerce/commerce/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lectures/django/lecture3/newyear/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/lectures/django/lecture3/newyear/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lectures/django/lecture3/tasks/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/lectures/django/lecture3/tasks/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lectures/javascript/counter/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/lectures/javascript/counter/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lectures/sql-models-migrations/airline/flights/migrations/0002_airport_alter_flight_destination_alter_flight_origin.py" beforeDir="false" afterPath="$PROJECT_DIR$/lectures/sql-models-migrations/airline/flights/migrations/0002_airport_alter_flight_destination_alter_flight_origin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lectures/sql-models-migrations/airline/flights/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/lectures/sql-models-migrations/airline/flights/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lectures/sql-models-migrations/airline/flights/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/lectures/sql-models-migrations/airline/flights/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lectures/sql-models-migrations/airline/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/lectures/sql-models-migrations/airline/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +55,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectId" id="23SAoY0lsse2VeImRKiogfyT21a" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -65,7 +77,8 @@
     <property name="javascript.nodejs.core.library.typings.version" value="14.17.5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="settings.typescriptcompiler" />
+    <property name="run.code.analysis.last.selected.profile" value="aDefault" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -82,7 +95,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1641717291308</updated>
-      <workItem from="1644025131880" duration="10597000" />
+      <workItem from="1644025131880" duration="11835000" />
+      <workItem from="1644054978565" duration="159000" />
+      <workItem from="1644055149242" duration="1226000" />
     </task>
     <task id="LOCAL-00001" summary="Add create listings functionality.&#10;&#10;Display listings on homepage as cards.&#10;&#10;Register models with Django admin app.">
       <created>1643138615000</created>

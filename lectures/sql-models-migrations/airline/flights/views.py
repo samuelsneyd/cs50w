@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
@@ -9,9 +10,7 @@ def index(request: HttpRequest) -> HttpResponse:
     """
     Renders the home page with a list of flights.
     """
-    return render(request, 'flights/user.html', {
-        'flights': Flight.objects.all()
-    })
+    return render(request, "flights/user.html", {"flights": Flight.objects.all()})
 
 
 def flight_page(request: HttpRequest, flight_id: int) -> HttpResponse:
@@ -20,25 +19,29 @@ def flight_page(request: HttpRequest, flight_id: int) -> HttpResponse:
     """
     try:
         flight = Flight.objects.get(pk=flight_id)
-    except:
-        return HttpResponse('Could not find flight')
-    return render(request, 'flights/flight.html', {
-        'flight': flight,
-        'passengers': flight.passengers.all(),
-        'non_passengers': Passenger.objects.exclude(flights=flight).all()
-    })
+    except ObjectDoesNotExist:
+        return HttpResponse("Could not find flight")
+    return render(
+        request,
+        "flights/flight.html",
+        {
+            "flight": flight,
+            "passengers": flight.passengers.all(),
+            "non_passengers": Passenger.objects.exclude(flights=flight).all(),
+        },
+    )
 
 
 def book(request: HttpRequest, flight_id: int) -> HttpResponse:
     """
     Renders a page that allows users to add passengers to a flight.
     """
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             flight = Flight.objects.get(pk=flight_id)
-            passenger = Passenger.objects.get(pk=int(request.POST['passenger']))
-        except:
-            return HttpResponse('Could not find flight or passenger')
+            passenger = Passenger.objects.get(pk=int(request.POST["passenger"]))
+        except ObjectDoesNotExist:
+            return HttpResponse("Could not find flight or passenger")
 
         passenger.flights.add(flight)
-        return HttpResponseRedirect(reverse('flight', args=(flight.id,)))
+        return HttpResponseRedirect(reverse("flight", args=(flight.id,)))

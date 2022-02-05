@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$" />
     <orderEntry type="jdk" jdkName="Python 3.10" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="bootstrap" level="application" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="format" value="PLAIN" />
@@ -14,6 +15,10 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/commerce/auctions/templates" />
+        <option value="$MODULE_DIR$/lectures/django/lecture3/hello/templates" />
+        <option value="$MODULE_DIR$/lectures/sql-models-migrations/airline/flights/templates" />
+        <option value="$MODULE_DIR$/wiki/encyclopedia/templates" />
+        <option value="$MODULE_DIR$/lectures/django/lecture3/tasks/templates" />
       </list>
     </option>
   </component>

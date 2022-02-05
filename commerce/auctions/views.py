@@ -188,7 +188,14 @@ def comment(request: HttpRequest, listing_id: int) -> HttpResponse:
 
 def bid(request: HttpRequest, listing_id) -> HttpResponse:
     """Handles users bidding on a listing."""
-    return HttpResponse("TODO")
+    if request.method == "POST":
+        try:
+            listing = Listing.objects.get(pk=listing_id)
+            user = User.objects.get(pk=request.user.pk)
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(reverse("index"))
+
+    return HttpResponseRedirect(reverse("index"))
 
 
 def categories(request: HttpRequest) -> HttpResponse:
