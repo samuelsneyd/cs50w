@@ -5,23 +5,25 @@
   <h2>Active Listings</h2>
 
   {% for listing in listings %}
-    <div class="card mb-3" style="max-width: 540px;">
-      <div class="row g-0">
-        <div class="col-md-4">
-          <img src="{{ listing.image }}" class="img-fluid rounded-start" alt="{{ listing.title }}">
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <h5 class="card-title">{{ listing.title }}</h5>
-            <p class="card-text">Price: ${{ listing.current_bid|intcomma }}</p>
-            <p class="card-text">{{ listing.description }}.</p>
-            <p class="card-text"><small class="text-muted">Created {{ listing.created_at|date:"M d, Y" }}</small></p>
-            <a href="{% url 'listing' listing.pk %}" class="card-link">View</a>
+    {% if listing.is_active %}
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{{ listing.image }}" class="img-fluid rounded-start" alt="{{ listing.title }}">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ listing.title }}</h5>
+              <p class="card-text">Price: ${{ listing.current_bid|intcomma }}</p>
+              <p class="card-text">{{ listing.description }}.</p>
+              <p class="card-text"><small class="text-muted">Created {{ listing.created_at|date:"M d, Y" }}</small></p>
+              <a href="{% url 'listing' listing.pk %}" class="card-link">View</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    {% endif %}
   {% empty %}
-    <div>No current listings.</div>
+    <div>No active listings.</div>
   {% endfor %}
 {% endblock %}

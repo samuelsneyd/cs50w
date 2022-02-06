@@ -3,7 +3,9 @@
 
 {% block body %}
   <h2>{{ listing.title }}</h2>
-
+  {% if is_winner %}
+    <h5>Congratulations! You won this listing.</h5>
+  {% endif %}
   <div class="card mb-3" style="max-width: 540px;">
     <div class="row g-0">
       <div class="col-md-4">
@@ -14,16 +16,18 @@
           <h5 class="card-title">{{ listing.title }}</h5>
           <p class="card-text">Price: ${{ listing.current_bid|intcomma }}</p>
           <p class="card-text">{{ listing.description }}.</p>
+          <p class="card-text"><small class="text-muted">Number of bids: {{ listing.bids.count }}</small></p>
           <p class="card-text"><small class="text-muted">Submitted by: {{ listing.user }}</small></p>
           <p class="card-text"><small class="text-muted">Created {{ listing.created_at|date:"M d, Y" }}</small></p>
         </div>
       </div>
     </div>
   </div>
-  {% if user %}
+  {% if user and listing.is_active and not is_owner %}
     <div id="bid-div">
       <form method="post" action="{% url 'bid' listing.pk %}">
         {% csrf_token %}
+        {{ bid_form }}
         <label>
           <input type="text" name="pk" value="{{ listing.pk }}" hidden>
         </label>
@@ -31,24 +35,38 @@
       </form>
     </div>
   {% endif %}
-  <div id="watch-div">
-    <form method="post" action="{% url 'watch' %}">
+  {% if is_owner %}
+    <div id="watch-div">
+    <form method="post" action="{% url 'close' listing.pk %}">
       {% csrf_token %}
       <label>
         <input type="text" name="pk" value="{{ listing.pk }}" hidden>
       </label>
-      {% if not is_watching %}
-        <input type="submit" value="Watch">
-      {% else %}
-        <input type="submit" value="Stop watching">
-      {% endif %}
+        <input type="submit" value="Close">
+    {% endif %}
     </form>
   </div>
+  {% if user %}
+    <div id="watch-div">
+      <form method="post" action="{% url 'watch' %}">
+        {% csrf_token %}
+        <label>
+          <input type="text" name="pk" value="{{ listing.pk }}" hidden>
+        </label>
+        {% if not is_watching %}
+          <input type="submit" value="Watch">
+        {% else %}
+          <input type="submit" value="Stop watching">
+        {% endif %}
+      </form>
+    </div>
+  {% endif %}
   <div class="card mb-3" style="max-width: 540px;">
     <div class="row g-0">
       <div class="col-md-8">
         <div class="card-body">
           <h5 class="card-title">Comments</h5>
+          {% if user %}
           <form method="post" action="{% url 'comment' listing.pk %}">
             {% csrf_token %}
             <div>
@@ -59,6 +77,7 @@
             </label>
             <input type="submit" value="Comment">
           </form>
+          {% endif %}
           {% for comment in comments %}
             <p class="card-text">
               {{ comment.comment }}<br>

@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
 from django.shortcuts import render
 from django.urls import reverse
 from .models import User, Listing, Category
-from .forms import ListingForm, CommentForm
+from .forms import ListingForm, CommentForm, BidForm
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -108,13 +108,24 @@ def listing_page(request: HttpRequest, listing_id: int) -> HttpResponse:
 
     comment_form = CommentForm()
     comments = listing.comments.all()
+    bids = list(listing.bids.order_by("amount"))
+    bid_form = BidForm()
     is_watching = False
+    is_winner = False
+    is_owner = False
     user = None
 
-    if request.user:
+    try:
         user = User.objects.get(pk=request.user.pk)
         if len(user.watching.filter(pk=listing_id)) > 0:
             is_watching = True
+        if len(bids) and bids[-1] and bids[-1].user == user:
+            is_winner = True
+    except ObjectDoesNotExist:
+        pass
+
+    if listing.user == user:
+        is_owner = True
 
     return render(
         request,
@@ -124,7 +135,10 @@ def listing_page(request: HttpRequest, listing_id: int) -> HttpResponse:
             "listing": listing,
             "comments": comments,
             "comment_form": comment_form,
+            "bid_form": bid_form,
             "is_watching": is_watching,
+            "is_winner": is_winner,
+            "is_owner": is_owner,
         },
     )
 
@@ -173,6 +187,7 @@ def comment(request: HttpRequest, listing_id: int) -> HttpResponse:
     return HttpResponseRedirect(reverse("listing", args=[listing.pk]))
 
 
+@login_required(login_url="login")
 def bid(request: HttpRequest, listing_id) -> HttpResponse:
     """Handles users bidding on a listing."""
     if request.method == "POST":
@@ -182,7 +197,20 @@ def bid(request: HttpRequest, listing_id) -> HttpResponse:
         except ObjectDoesNotExist:
             return HttpResponseRedirect(reverse("index"))
 
-    return HttpResponseRedirect(reverse("index"))
+        bid_form = BidForm(request.POST)
+
+        if bid_form.is_valid():
+            if bid_form.cleaned_data["amount"] < listing.current_bid:
+                return HttpResponseRedirect(reverse("listing", args=[listing_id]))
+
+            new_bid = bid_form.save(commit=False)
+            new_bid.user = user
+            new_bid.listing = listing
+            listing.current_bid = new_bid.amount
+            new_bid.save()
+            listing.save()
+
+    return HttpResponseRedirect(reverse("listing", args=[listing_id]))
 
 
 def categories(request: HttpRequest) -> HttpResponse:
@@ -205,3 +233,35 @@ def category(request: HttpRequest, category_name: str) -> HttpResponse:
         "auctions/category.html",
         {"category": current_category, "listings": listings},
     )
+
+
+def close(request: HttpRequest, listing_id: int) -> HttpResponse:
+    """Closes an active listing as the owner"""
+    if request.method == "POST":
+        try:
+            listing = Listing.objects.get(pk=listing_id)
+            user = User.objects.get(pk=request.user.pk)
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(reverse("index"))
+
+        if listing.user != user:
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            listing.is_active = False
+            listing.save()
+            return HttpResponseRedirect(reverse("listing", args=[listing_id]))
+
+    return HttpResponseRedirect(reverse("index"))
+
+
+@login_required(login_url="login")
+def won(request: HttpRequest) -> HttpResponse:
+    """Shows all closed listings a user has won."""
+    closed_listings = Listing.objects.filter(is_active=False)
+    won_listings = []
+    for listing in closed_listings:
+        bids = list(listing.bids.order_by("amount"))
+        if len(bids) and bids[-1].user == request.user:
+            won_listings.append(listing)
+
+    return render(request, "auctions/won.html", {"listings": won_listings})
