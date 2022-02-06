@@ -3,7 +3,7 @@
 
 {% block body %}
   <h2>{{ listing.title }}</h2>
-  {% if is_winner %}
+  {% if is_winner and not listing.is_active %}
     <h5>Congratulations! You won this listing.</h5>
   {% endif %}
   <div class="card mb-3" style="max-width: 540px;">

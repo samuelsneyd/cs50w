@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
@@ -200,8 +201,9 @@ def bid(request: HttpRequest, listing_id) -> HttpResponse:
         bid_form = BidForm(request.POST)
 
         if bid_form.is_valid():
-            if bid_form.cleaned_data["amount"] < listing.current_bid:
-                return HttpResponseRedirect(reverse("listing", args=[listing_id]))
+            if bid_form.cleaned_data["amount"] <= listing.current_bid:
+                message = "Invalid bid"
+                return render(request, "auctions/error.html", {"message": message})
 
             new_bid = bid_form.save(commit=False)
             new_bid.user = user
@@ -210,7 +212,7 @@ def bid(request: HttpRequest, listing_id) -> HttpResponse:
             new_bid.save()
             listing.save()
 
-    return HttpResponseRedirect(reverse("listing", args=[listing_id]))
+        return HttpResponseRedirect(reverse("listing", args=[listing_id]))
 
 
 def categories(request: HttpRequest) -> HttpResponse:
