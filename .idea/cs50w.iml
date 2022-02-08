@@ -32,6 +32,7 @@
         <option value="$MODULE_DIR$/wiki/encyclopedia/templates" />
         <option value="$MODULE_DIR$/lectures/django/lecture3/tasks/templates" />
         <option value="$MODULE_DIR$/mail/mail/templates" />
+        <option value="$MODULE_DIR$/lectures/user-interfaces/singlepagedjango/singlepage/templates" />
       </list>
     </option>
   </component>
