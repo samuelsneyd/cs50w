@@ -13,6 +13,7 @@ function compose_email() {
   // Show compose view and hide other views
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
+  document.querySelector('#single-email-view').style.display = 'none';
 
   // Clear out composition fields
   document.querySelector('#compose-recipients').value = '';
@@ -34,57 +35,90 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#single-email-view').style.display = 'none';
 
   // Show the mailbox name
-  document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  document.querySelector('#emails-view-header').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
   fetchMailbox(mailbox)
     .then(emails => displayEmails(emails));
 }
 
+function load_email(emailId) {
+  document.querySelector('#emails-view').style.display = 'none';
+  document.querySelector('#compose-view').style.display = 'none';
+  const singleEmailView = document.querySelector('#single-email-view');
+  singleEmailView.style.display = 'block';
+  singleEmailView.innerHTML = '';
+
+  fetchEmailById(emailId)
+    .then(email => displaySingleEmail(email))
+    .catch(error => console.error(error));
+}
+
+function createButton(text, onClick) {
+  const button = document.createElement('button');
+  button.className = 'btn btn-sm btn-outline-primary';
+  button.innerHTML = text;
+  button.onclick = onClick;
+  return button;
+}
+
 function displayEmails(emails) {
-  const emailsView = document.getElementById('emails-view');
+  const emailsTable = document.getElementById('emails-table-body');
+  emailsTable.innerHTML = '';
 
   emails.forEach(email => {
-    const emailElement = document.createElement('div');
-    emailElement.className = 'col-md-12';
 
-    const rowColumn = document.createElement('div');
-    rowColumn.className = 'col-md-8';
-    rowColumn.innerHTML = `From: ${email.sender} | Subject: ${email.subject} | Timestamp: ${email.timestamp}`;
+    const emailRow = document.createElement('tr');
+    emailRow.id = email.id;
+    emailRow.style.background = email.read ? 'white' : 'lightgrey';
+    emailRow.onclick = () => load_email(email.id);
 
-    const rowControls = document.createElement('div');
-    rowControls.className = 'col-md-4';
+    const from = document.createElement('td');
+    from.innerHTML = email.sender;
+    const subject = document.createElement('td');
+    subject.innerHTML = email.subject;
+    const timestamp = document.createElement('td');
+    timestamp.innerHTML = email.timestamp;
 
-    const viewButton = document.createElement('button');
-    viewButton.innerHTML = 'View';
-    viewButton.onclick = () => {};
-
-    const replyButton = document.createElement('button');
-    replyButton.innerHTML = 'Reply';
-    replyButton.onclick = () => replyEmail(email);
-
-    const archiveButton = document.createElement('button');
-    archiveButton.innerHTML = email.archived ? 'Un-archive' : 'Archive';
-    archiveButton.onclick = () => {
-      archiveEmail(email.id, !email.archived).then(() => {
-        archiveButton.parentElement.parentElement.remove();
-      })
-    };
-
-    rowControls.append(viewButton);
-    rowControls.append(replyButton);
-    rowControls.append(archiveButton);
-
-    emailElement.append(rowColumn);
-    emailElement.append(rowControls);
-
-    emailsView.append(emailElement);
+    emailRow.appendChild(from);
+    emailRow.appendChild(subject);
+    emailRow.appendChild(timestamp);
+    emailsTable.appendChild(emailRow);
   });
 }
 
-function viewEmail(email) {
-  // TODO
+function displaySingleEmail(email) {
+  const singleEmailView = document.querySelector('#single-email-view');
+
+  if (!email.read) {
+    readEmail(email.id, true)
+      .catch((error) => console.error(error));
+  }
+  const from = document.createElement('div');
+  from.innerHTML = `<strong>From:</strong> ${email.sender}`;
+  const to = document.createElement('div');
+  to.innerHTML = `<strong>To:</strong> ${email.recipients}`;
+  const subject = document.createElement('div');
+  subject.innerHTML = `<strong>Subject:</strong> ${email.subject}`;
+  const timestamp = document.createElement('div');
+  timestamp.innerHTML = `<strong>Timestamp:</strong> ${email.timestamp}`;
+  const replyButton = createButton('Reply', () => replyEmail(email));
+  const archiveButton = createButton(email.archived ? 'Un-archive' : 'Archive', () => {
+    archiveEmail(email.id, !email.archived)
+      .then(() => load_email(email.id));
+  });
+  const body = document.createElement('div');
+  body.innerHTML = email.body;
+
+  singleEmailView.appendChild(from);
+  singleEmailView.appendChild(to);
+  singleEmailView.appendChild(subject);
+  singleEmailView.appendChild(timestamp);
+  singleEmailView.appendChild(replyButton);
+  singleEmailView.appendChild(archiveButton);
+  singleEmailView.appendChild(body);
 }
 
 function replyEmail(email) {
@@ -116,7 +150,6 @@ function sendEmail(recipients, subject, body) {
       body
     })
   })
-    .then(response => response.json())
     .catch(error => console.error(error));
 }
 
@@ -137,6 +170,5 @@ function readEmail(emailId, isRead) {
       read: isRead
     })
   })
-    .then(response => response.json())
     .catch(error => console.error(error));
 }
