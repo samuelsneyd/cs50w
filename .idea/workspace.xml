@@ -4,6 +4,12 @@
     <list default="true" id="4ed54143-c144-4ea3-8f93-5a297fe15a60" name="Changes" comment="Add create listings functionality.&#10;&#10;Display listings on homepage as cards.&#10;&#10;Register models with Django admin app.">
       <change beforePath="$PROJECT_DIR$/.idea/cs50w.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cs50w.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mail/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/mail/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mail/mail/static/mail/inbox.js" beforeDir="false" afterPath="$PROJECT_DIR$/mail/mail/static/mail/inbox.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mail/mail/templates/mail/inbox.html" beforeDir="false" afterPath="$PROJECT_DIR$/mail/mail/templates/mail/inbox.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mail/mail/templates/mail/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/mail/mail/templates/mail/layout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mail/mail/templates/mail/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/mail/mail/templates/mail/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mail/mail/templates/mail/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/mail/mail/templates/mail/register.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,12 +73,14 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="14.17.5" />
     <property name="javascript.nodejs.core.library.typings.version" value="14.17.5" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lectures/user-interfaces/singlepagedjango/singlepage/templates/singlepage" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../retreat_480" />
+    <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.stylelint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.stylelint" value="" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="run.code.analysis.last.selected.profile" value="aDefault" />
-    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -103,6 +111,17 @@
       <workItem from="1644132694108" duration="5860000" />
       <workItem from="1644157208734" duration="91000" />
       <workItem from="1644197844433" duration="2962000" />
+      <workItem from="1644297280918" duration="1086000" />
+      <workItem from="1644308632692" duration="843000" />
+      <workItem from="1644547054563" duration="11000" />
+      <workItem from="1648944624550" duration="2454000" />
+      <workItem from="1648947110569" duration="5305000" />
+      <workItem from="1649627694717" duration="61000" />
+      <workItem from="1649628471714" duration="542000" />
+      <workItem from="1649630125274" duration="1322000" />
+      <workItem from="1649733550319" duration="75000" />
+      <workItem from="1650173989061" duration="3156000" />
+      <workItem from="1650240916234" duration="18000" />
     </task>
     <task id="LOCAL-00001" summary="Add create listings functionality.&#10;&#10;Display listings on homepage as cards.&#10;&#10;Register models with Django admin app.">
       <created>1643138615000</created>
