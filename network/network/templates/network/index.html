@@ -1,5 +1,44 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+  <div class="container">
+    <h1>All Posts</h1>
+    {% if user.is_authenticated %}
+      <div class="card">
+        <div class="card-body">
+          <form>
+            <div class="form-group">
+              <h5 class="card-title">
+                <label for="text-post">New Post</label>
+              </h5>
+              <textarea
+                class="form-control"
+                id="text-post"
+                aria-describedby="text-post"
+                placeholder="Share your thoughts...">
+              </textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Post</button>
+          </form>
+        </div>
+      </div>
+    {% endif %}
+    {% if not posts %}
+      <p>No posts yet!</p>
+    {% endif %}
+    {% for post in posts %}
+      <div class="card" style="width: 100%;">
+        <div class="card-body">
+          <h5 class="card-title">{{ post.user }}</h5>
+          <!-- TODO if post.user == user.pk -->
+          <a class="card-link" href="TODO">Edit</a>
+          <!-- endif -->
+          <p class="card-text">{{ post.text }}</p>
+          <h6 class="card-subtitle mb-2 text-muted">{{ post.created_at }}</h6>
+          <h6 class="card-subtitle mb-2 text-muted">{{ post.likes }} likes</h6>
+          <h6 class="card-subtitle mb-2 text-muted">Comment</h6>
+        </div>
+      </div>
+      </div>
+    {% endfor %}
 {% endblock %}
