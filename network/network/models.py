@@ -35,3 +35,12 @@ class Comment(models.Model):
     text = models.CharField(max_length=280)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Follow(models.Model):
+    """Represents a user following another user"""
+
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
+    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followers")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
