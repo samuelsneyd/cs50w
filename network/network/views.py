@@ -1,21 +1,32 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import User, Post
 
 
 def index(request):
-    posts = [{
-        "user": "user",
-        "text": "text",
-        "created_at": "created_at",
-        "likes": 0
-    }]
+    posts = Post.objects.all().order_by("created_at").reverse()
+
     return render(request, "network/index.html", {
-        "posts": posts
+        "posts": posts,
+        "title": "All Posts"
+    })
+
+
+@login_required
+def following(request):
+    if request.user.following.count() > 0:
+        posts = Post.objects.filter(user__in=request.user.following)
+    else:
+        posts = None
+
+    return render(request, "network/index.html", {
+        "posts": posts,
+        "title": "Followed Posts"
     })
 
 
@@ -69,3 +80,27 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def new_post(request):
+    if request.method == "POST":
+        text = request.POST["text"]
+        try:
+            post = Post(
+                user=request.user,
+                text=text
+            )
+            post.save()
+        except IntegrityError:
+            return redirect(reverse("index"), {"message": "Error when creating new post"})
+
+    return redirect(reverse("index"))
+
+
+def user_profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        user = None
+
+    return render(request, "network/user.html", {"user": user})

@@ -1,0 +1,7 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+  {% if not user %}
+    <p>Can not find that user!</p>
+  {% endif %}
+{% endblock %}

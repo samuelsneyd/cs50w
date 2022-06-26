@@ -38,7 +38,7 @@ class Comment(models.Model):
 
 
 class Follow(models.Model):
-    """Represents a user following another user"""
+    """A user following another user"""
 
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
     following = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followers")

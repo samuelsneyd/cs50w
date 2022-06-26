@@ -2,11 +2,12 @@
 
 {% block body %}
   <div class="container">
-    <h1>All Posts</h1>
+    <h1>{{ title }}</h1>
     {% if user.is_authenticated %}
       <div class="card">
         <div class="card-body">
-          <form>
+          <form id="text-post-form" action="/new-post" method="post">
+            {% csrf_token %}
             <div class="form-group">
               <h5 class="card-title">
                 <label for="text-post">New Post</label>
@@ -14,9 +15,9 @@
               <textarea
                 class="form-control"
                 id="text-post"
+                name="text"
                 aria-describedby="text-post"
-                placeholder="Share your thoughts...">
-              </textarea>
+                placeholder="Share your thoughts..."></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Post</button>
           </form>
@@ -35,10 +36,10 @@
           <!-- endif -->
           <p class="card-text">{{ post.text }}</p>
           <h6 class="card-subtitle mb-2 text-muted">{{ post.created_at }}</h6>
-          <h6 class="card-subtitle mb-2 text-muted">{{ post.likes }} likes</h6>
-          <h6 class="card-subtitle mb-2 text-muted">Comment</h6>
+          <h6 class="card-subtitle mb-2 text-muted">{{ post.likes.count }} likes</h6>
+          <h6 class="card-subtitle mb-2 text-muted">{{ post.comments.count }} comments</h6>
         </div>
       </div>
-      </div>
     {% endfor %}
+  </div>
 {% endblock %}
