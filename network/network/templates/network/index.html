@@ -30,7 +30,9 @@
     {% for post in posts %}
       <div class="card" style="width: 100%;">
         <div class="card-body">
-          <h5 class="card-title">{{ post.user }}</h5>
+          <h5 class="card-title">
+            <a href="/u/{{ post.user.username }}">{{ post.user.username }}</a>
+          </h5>
           <!-- TODO if post.user == user.pk -->
           <a class="card-link" href="TODO">Edit</a>
           <!-- endif -->

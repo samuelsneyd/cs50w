@@ -97,10 +97,31 @@ def new_post(request):
     return redirect(reverse("index"))
 
 
-def user_profile(request, username):
+def user_profile_view(request, username):
     try:
-        user = User.objects.get(username=username)
+        user_profile = User.objects.get(username=username)
     except User.DoesNotExist:
-        user = None
+        user_profile = None
 
-    return render(request, "network/user.html", {"user": user})
+    if user_profile:
+        posts = Post.objects.filter(user=user_profile).order_by("created_at").reverse()
+    else:
+        posts = []
+
+    is_following = False
+    if request.user and user_profile:
+        if len(user_profile.following.filter(following=request.user)) > 0:
+            is_following = True
+
+    return render(request, "network/user.html", {
+        "user_profile": user_profile,
+        "posts": posts,
+        "is_following": is_following
+    })
+
+
+def follow(request):
+    if request.method == "POST":
+        pass
+    else:
+        return redirect(reverse("index"))

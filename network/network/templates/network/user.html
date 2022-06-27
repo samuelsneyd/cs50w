@@ -1,7 +1,41 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-  {% if not user %}
-    <p>Can not find that user!</p>
-  {% endif %}
+  <div class="container">
+    {% if not user_profile %}
+      <p>Can not find that user!</p>
+    {% else %}
+      <h1>{{ user_profile.username }}</h1>
+      <p>Followers: {{ user_profile.followers.count }}</p>
+      <p>Following: {{ user_profile.following.count }}</p>
+
+      {% if user.is_authenticated and user != user_profile %}
+        <button class="btn btn-primary" id="follow-button">
+          {% if is_following %}
+            Unfollow
+          {% else %}
+            Follow
+          {% endif %}
+        </button>
+      {% endif %}
+
+      {% for post in posts %}
+        <div class="card" style="width: 100%;">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="/u/{{ post.user.username }}">{{ post.user.username }}</a>
+            </h5>
+            <!-- TODO if post.user == user -->
+            <a class="card-link" href="TODO">Edit</a>
+            <!-- endif -->
+            <p class="card-text">{{ post.text }}</p>
+            <h6 class="card-subtitle mb-2 text-muted">{{ post.created_at }}</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{ post.likes.count }} likes</h6>
+            <h6 class="card-subtitle mb-2 text-muted">{{ post.comments.count }} comments</h6>
+          </div>
+        </div>
+      {% endfor %}
+
+    {% endif %}
+  </div>
 {% endblock %}
