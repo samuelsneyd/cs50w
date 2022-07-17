@@ -3,6 +3,7 @@
 {% block body %}
   <div class="container">
     <h1>{{ title }}</h1>
+
     {% if user.is_authenticated %}
       <div class="card">
         <div class="card-body">
@@ -24,15 +25,14 @@
         </div>
       </div>
     {% endif %}
-    {% if not posts %}
-      <p>No posts yet!</p>
-    {% endif %}
-    {% for post in posts %}
+
+    {% for post in page_obj %}
       <div class="card" style="width: 100%;">
         <div class="card-body">
           <h5 class="card-title">
             <a href="/u/{{ post.user.username }}">{{ post.user.username }}</a>
           </h5>
+
           {% if post.user == request.user %}
             <button class="btn btn-link post-edit-button" data-id="{{ post.pk }}">Edit</button>
             <div style="display: none" id="edit-post-{{ post.pk }}">
@@ -55,6 +55,7 @@
               </div>
             </div>
           {% endif %}
+
           <p class="card-text" id="post-text-{{ post.pk }}">{{ post.text }}</p>
           <h6 class="card-subtitle mb-2 text-muted">{{ post.created_at }}</h6>
           <h6 class="card-subtitle mb-2 text-muted likes-count likes-count-{{ post.id }}" data-id="{{ post.id }}">
@@ -64,5 +65,24 @@
         </div>
       </div>
     {% endfor %}
+
+    <div class="pagination">
+      <span class="step-links">
+        {% if page_obj.has_previous %}
+          <a href="?page=1">&laquo; first</a>
+          <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">next</a>
+          <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+
+        </span>
+    </div>
   </div>
 {% endblock %}

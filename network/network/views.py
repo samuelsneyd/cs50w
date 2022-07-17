@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect, JsonResponse
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import User, Post, Like
@@ -10,9 +11,12 @@ from .models import User, Post, Like
 
 def index(request):
     posts = Post.objects.all().order_by("created_at").reverse()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, "network/index.html", {
-        "posts": posts,
+        "page_obj": page_obj,
         "title": "All Posts"
     })
 
@@ -21,9 +25,12 @@ def index(request):
 def following_view(request):
     followed_users = User.objects.filter(followers=request.user)
     posts = Post.objects.filter(user__in=followed_users)
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     return render(request, "network/index.html", {
-        "posts": posts,
+        "page_obj": page_obj,
         "title": "Followed Posts"
     })
 
@@ -118,10 +125,10 @@ def user_profile_view(request, username):
     except User.DoesNotExist:
         user_profile = None
 
-    if user_profile:
-        posts = Post.objects.filter(user=user_profile).order_by("created_at").reverse()
-    else:
-        posts = []
+    posts = Post.objects.filter(user=user_profile).order_by("created_at").reverse()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
     is_following = False
     if request.user and user_profile and request.user in user_profile.followers.all():
@@ -129,8 +136,9 @@ def user_profile_view(request, username):
 
     return render(request, "network/user.html", {
         "user_profile": user_profile,
-        "posts": posts,
-        "is_following": is_following
+        # "posts": posts,
+        "is_following": is_following,
+        "page_obj": page_obj
     })
 
 
