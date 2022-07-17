@@ -1,11 +1,11 @@
+import json
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
-
-from .models import User, Post
+from .models import User, Post, Like
 
 
 def index(request):
@@ -18,11 +18,9 @@ def index(request):
 
 
 @login_required
-def following(request):
-    if request.user.following.count() > 0:
-        posts = Post.objects.filter(user__in=request.user.following)
-    else:
-        posts = None
+def following_view(request):
+    followed_users = User.objects.filter(followers=request.user)
+    posts = Post.objects.filter(user__in=followed_users)
 
     return render(request, "network/index.html", {
         "posts": posts,
@@ -97,7 +95,24 @@ def new_post(request):
     return redirect(reverse("index"))
 
 
+@login_required
+def edit_post(request, post_id):
+    if request.method == "POST":
+        text = json.loads(request.body)['text']
+
+        try:
+            post = Post.objects.get(user=request.user, pk=post_id)
+            post.text = text
+            post.save()
+            return JsonResponse({"success": "post updated successfully"}, status=200)
+        except Post.DoesNotExist:
+            return JsonResponse({"error": "invalid request"}, status=400)
+
+    return JsonResponse({"error": "method must be POST"}, status=400)
+
+
 def user_profile_view(request, username):
+    """Renders a user's profile view."""
     try:
         user_profile = User.objects.get(username=username)
     except User.DoesNotExist:
@@ -109,9 +124,8 @@ def user_profile_view(request, username):
         posts = []
 
     is_following = False
-    if request.user and user_profile:
-        if len(user_profile.following.filter(following=request.user)) > 0:
-            is_following = True
+    if request.user and user_profile and request.user in user_profile.followers.all():
+        is_following = True
 
     return render(request, "network/user.html", {
         "user_profile": user_profile,
@@ -120,8 +134,41 @@ def user_profile_view(request, username):
     })
 
 
-def follow(request):
-    if request.method == "POST":
-        pass
+@login_required
+def like_view(request, post_id):
+    """Creates a like representing a user liking a post"""
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required"}, status=400)
+
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return JsonResponse({"error": "post is not valid"}, status=400)
+
+    try:
+        like = Like.objects.get(user=request.user, post=post)
+        like.delete()
+        return JsonResponse({"success": "post unliked successfully"})
+    except Like.DoesNotExist:
+        like = Like.objects.create(user=request.user, post=post)
+        like.save()
+        return JsonResponse({"success": "post liked successfully"})
+
+
+@login_required
+def follow_view(request, user_id):
+    """Follows a user"""
+    if request.method != "POST":
+        return JsonResponse({"error": "POST request required"}, status=400)
+
+    try:
+        user_profile = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "user is not valid"}, status=400)
+
+    if request.user in user_profile.followers.all():
+        user_profile.followers.remove(request.user)
+        return JsonResponse({"success": "user unfollowed successfully"})
     else:
-        return redirect(reverse("index"))
+        user_profile.followers.add(request.user)
+        return JsonResponse({"success": "user followed successfully"})

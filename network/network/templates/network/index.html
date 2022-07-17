@@ -33,13 +33,34 @@
           <h5 class="card-title">
             <a href="/u/{{ post.user.username }}">{{ post.user.username }}</a>
           </h5>
-          <!-- TODO if post.user == user.pk -->
-          <a class="card-link" href="TODO">Edit</a>
-          <!-- endif -->
-          <p class="card-text">{{ post.text }}</p>
+          {% if post.user == request.user %}
+            <button class="btn btn-link post-edit-button" data-id="{{ post.pk }}">Edit</button>
+            <div style="display: none" id="edit-post-{{ post.pk }}">
+              <label>
+                <textarea
+                  class="card-text-edit"
+                  data-id="{{ post.pk }}"
+                  id="edit-post-textarea-{{ post.pk }}"
+                  name="text"
+                >{{ post.text }}</textarea>
+              </label>
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-primary edit-submit-button"
+                  id="edit-submit-button-{{ post.pk }}"
+                  data-id="{{ post.pk }}"
+                >Save
+                </button>
+              </div>
+            </div>
+          {% endif %}
+          <p class="card-text" id="post-text-{{ post.pk }}">{{ post.text }}</p>
           <h6 class="card-subtitle mb-2 text-muted">{{ post.created_at }}</h6>
-          <h6 class="card-subtitle mb-2 text-muted">{{ post.likes.count }} likes</h6>
+          <h6 class="card-subtitle mb-2 text-muted likes-count likes-count-{{ post.id }}" data-id="{{ post.id }}">
+            ❤ {{ post.likes.count }} likes</h6>
           <h6 class="card-subtitle mb-2 text-muted">{{ post.comments.count }} comments</h6>
+          <button type="button" class="btn btn-primary comment-button comment-button-{{ post.id }}">Comment</button>
         </div>
       </div>
     {% endfor %}

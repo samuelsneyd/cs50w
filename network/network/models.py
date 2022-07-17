@@ -5,8 +5,15 @@ from django.db import models
 class User(AbstractUser):
     """Users of the application"""
 
+    followers = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='user_followers')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def get_followers_count(self):
+        return self.followers.count()
+
+    def get_following_count(self):
+        return User.objects.filter(followers=self).count()
 
 
 class Post(models.Model):
@@ -33,14 +40,5 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     text = models.CharField(max_length=280)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class Follow(models.Model):
-    """A user following another user"""
-
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name="following")
-    following = models.ForeignKey(User, on_delete=models.CASCADE, related_name="followers")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
