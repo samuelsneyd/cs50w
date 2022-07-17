@@ -54,8 +54,8 @@
             <h6 class="card-subtitle mb-2 text-muted">{{ post.created_at }}</h6>
             <h6 class="card-subtitle mb-2 text-muted likes-count likes-count-{{ post.id }}" data-id="{{ post.id }}">
               ❤ {{ post.likes.count }} likes</h6>
-            <h6 class="card-subtitle mb-2 text-muted">{{ post.comments.count }} comments</h6>
-            <button type="button" class="btn btn-primary comment-button comment-button-{{ post.id }}">Comment</button>
+{#            <h6 class="card-subtitle mb-2 text-muted">{{ post.comments.count }} comments</h6>#}
+{#            <button type="button" class="btn btn-primary comment-button comment-button-{{ post.id }}">Comment</button>#}
           </div>
         </div>
       {% endfor %}
